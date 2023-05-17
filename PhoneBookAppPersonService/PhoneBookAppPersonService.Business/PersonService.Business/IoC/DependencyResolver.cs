@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using AutoMapper;
+using Microsoft.Extensions.Hosting;
 using PersonService.Business.AutoMapper;
 using PersonService.Business.Services;
+using PersonService.Business.Services.MyBackgroundService;
 using PersonService.DataAccess.Repo;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,9 @@ namespace PersonService.Business.IoC
 
             builder.RegisterType<PersonServices>().As<IPersonServices>().InstancePerLifetimeScope();
             builder.RegisterType<ContactInfoServices>().As<IContactInfoServices>().InstancePerLifetimeScope();
+
+            //BackgrounService 
+            builder.RegisterType<ReportBackgroundService>().As<IHostedService>().InstancePerDependency();
 
             //AUTOMAPPER
             builder.Register(context => new MapperConfiguration(cfg =>
