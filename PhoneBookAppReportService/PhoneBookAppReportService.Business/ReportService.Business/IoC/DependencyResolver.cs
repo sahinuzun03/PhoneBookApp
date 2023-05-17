@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AutoMapper;
 using ReportService.Business.AutoMapper;
+using ReportService.Business.Services;
 using ReportService.DataAccess.Repo;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,10 @@ namespace ReportService.Business.IoC
         {
 
             builder.RegisterType<ReportRepo>().As<IReportRepo>().InstancePerLifetimeScope();
+
+            builder.RegisterType<ReportServices>().As<IReportServices>().InstancePerLifetimeScope();    
+
+            builder.RegisterType<ReportDetailsRepo>().As<IReportDetailsRepo>().InstancePerLifetimeScope();
 
             //AUTOMAPPER
             builder.Register(context => new MapperConfiguration(cfg =>

@@ -12,5 +12,7 @@ namespace PersonService.Business.Services
         Task CreateContactInfo(Guid personId, ContactInfoModel contactInfoModel);
         Task DeleteContactInfo(Guid contactId);
         Task<List<ContactInfoViewModel>> GetContactInfo(Guid personId);
+        void ListenToQueue();
+        List<ReportDetailDTO> SendReportDetail();
     }
 }
