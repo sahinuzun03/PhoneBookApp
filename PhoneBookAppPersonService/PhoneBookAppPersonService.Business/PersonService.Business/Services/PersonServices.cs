@@ -1,4 +1,8 @@
-﻿using PersonService.Business.Models;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using PersonService.Business.Models;
+using PersonService.DataAccess.Repo;
+using PersonService.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +13,52 @@ namespace PersonService.Business.Services
 {
     public class PersonServices : IPersonServices
     {
-        public Task CreatePerson(PersonModel createPersonModel)
+        private readonly IPersonRepo _personRepo;
+        private readonly IMapper _mapper;
+        public PersonServices(IPersonRepo personRepo,IMapper mapper)
         {
-            throw new NotImplementedException();
+            _personRepo = personRepo;
+            _mapper = mapper;   
+        }
+        public async Task CreatePerson(PersonModel createPersonModel)
+        {
+           var addPerson = _mapper.Map<Person>(createPersonModel);
+            await _personRepo.InsertAsync(addPerson);   
+            _personRepo.SaveChanges();
         }
 
-        public Task DeletePerson(Guid Id)
+        public async Task DeletePerson(Guid Id)
         {
-            throw new NotImplementedException();
+            _personRepo.DeleteById(Id);
+            await _personRepo.SaveChangesAsync();
         }
 
-        public Task<List<PersonViewModel>> GetPeople()
+        public async Task<List<PersonViewModel>> GetPeople()
         {
-            throw new NotImplementedException();
+            var personList = await _personRepo.GetDataWithLinqExp(x => x.DeletedAt == null).Select(x => new PersonViewModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Company = x.Company != null ? x.Company : "",
+            }).ToListAsync();
+
+            return personList;
+        }
+
+        public async Task<PersonDetailModel> GetPersonDetail(Guid Id)
+
+        {
+            var personDetail = await  _personRepo.GetDataWithLinqExp(x => x.DeletedAt == null && x.Id == Id, "ContactInfoList").Select(x => new PersonDetailModel
+            {
+                Company = x.Company,
+                Id = x.Id,
+                LastName = x.LastName,
+                FirstName = x.FirstName,
+                PersonContacts = x.ContactInfoList
+            }).FirstOrDefaultAsync();
+
+            return personDetail;
         }
     }
 }

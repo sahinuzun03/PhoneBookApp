@@ -15,10 +15,6 @@ namespace PersonService.Business.Models
         public string? ContactContent { get; set; }
     }
 
-    public class ContactInfoDeleteModel
-    {
-        public Guid Id { get; set; }
-    }
     public class ContactInfoViewModel
     {
         public Guid Id { get; set; }
@@ -26,6 +22,5 @@ namespace PersonService.Business.Models
         public string? PhoneNumber { get; set; }
         public string? EmailAddress { get; set; }
         public string? ContactContent { get; set; }
-        public string? PersonName { get;set; } 
     }
 }

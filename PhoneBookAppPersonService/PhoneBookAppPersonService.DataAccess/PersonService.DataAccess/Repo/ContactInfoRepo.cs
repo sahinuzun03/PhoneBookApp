@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PersonService.DataAccess.Context;
 using PersonService.Entities;
 using PhoneBookApp.Core.DataAccess;
 using System;
@@ -11,7 +12,7 @@ namespace PersonService.DataAccess.Repo
 {
     public class ContactInfoRepo : BaseRepo<ContactInfo>, IContactInfoRepo
     {
-        public ContactInfoRepo(DbContext appDbContext) : base(appDbContext)
+        public ContactInfoRepo(PersonDbContext appDbContext) : base(appDbContext)
         {
         }
     }

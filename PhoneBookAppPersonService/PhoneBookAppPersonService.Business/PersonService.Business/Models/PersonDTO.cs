@@ -13,10 +13,6 @@ namespace PersonService.Business.Models
         public string LastName { get; set; }
         public string? Company { get; set; }
     }
-    public class PersonDeleteModel
-    {
-        public Guid Id { get; set; }
-    }
 
     public class PersonViewModel
     {
@@ -24,5 +20,14 @@ namespace PersonService.Business.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Company { get; set; }
+    }
+
+    public class PersonDetailModel
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string? Company { get; set; }
+        public object? PersonContacts { get; set; }
     }
 }

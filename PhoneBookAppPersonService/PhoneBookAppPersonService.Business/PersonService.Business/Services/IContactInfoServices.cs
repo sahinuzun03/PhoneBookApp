@@ -9,8 +9,8 @@ namespace PersonService.Business.Services
 {
     public interface IContactInfoServices
     {
-        Task CreateContactInfo(Guid PersonId, ContactInfoModel contactInfoModel);
-        Task DeleteContactInfo(Guid PersonId, ContactInfoDeleteModel contactInfoDeleteModel);
-        Task<List<ContactInfoViewModel>> GetContactInfo(Guid PersonId);
+        Task CreateContactInfo(Guid personId, ContactInfoModel contactInfoModel);
+        Task DeleteContactInfo(Guid contactId);
+        Task<List<ContactInfoViewModel>> GetContactInfo(Guid personId);
     }
 }

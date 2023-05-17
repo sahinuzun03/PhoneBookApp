@@ -21,5 +21,6 @@ namespace PhoneBookApp.Core.DataAccess
         void SaveChanges();
         IQueryable<T> GetAll(bool writable = false);
         IQueryable<T> GetData(bool forWrite = false);
+        IQueryable<T> GetDataWithLinqExp(Expression<Func<T, bool>> whereClause, params string[] navObjects);
     }
 }

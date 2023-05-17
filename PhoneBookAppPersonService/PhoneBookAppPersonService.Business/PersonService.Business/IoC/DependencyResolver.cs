@@ -15,10 +15,14 @@ namespace PersonService.Business.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
+            // REPO 
             builder.RegisterType<PersonRepo>().As<IPersonRepo>().InstancePerLifetimeScope();
             builder.RegisterType<ContactInfoRepo>().As<IContactInfoRepo>().InstancePerLifetimeScope();
 
+            //SERVİCE
+
             builder.RegisterType<PersonServices>().As<IPersonServices>().InstancePerLifetimeScope();
+            builder.RegisterType<ContactInfoServices>().As<IContactInfoServices>().InstancePerLifetimeScope();
 
             //AUTOMAPPER
             builder.Register(context => new MapperConfiguration(cfg =>
@@ -36,6 +40,8 @@ namespace PersonService.Business.IoC
             })
             .As<IMapper>()
             .InstancePerLifetimeScope();
+
+
             base.Load(builder);
         }
     }

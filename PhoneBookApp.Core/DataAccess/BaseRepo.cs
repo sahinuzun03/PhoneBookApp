@@ -62,6 +62,16 @@ namespace PhoneBookApp.Core.DataAccess
             return GetAll(writable).Where(whereClause);
         }
 
+        public IQueryable<T> GetDataWithLinqExp(Expression<Func<T, bool>> whereClause, params string[] navObjects)
+        {
+            var query = GetAll(false).Where(whereClause);
+            foreach (var navObject in navObjects)
+            {
+                query = query.Include(navObject);
+            }
+            return query;
+        }
+
         public IQueryable<T> GetDataWithLinqExpForWriting(Expression<Func<T, bool>> whereClause, params string[] navObjects)
         {
             var query = GetAll(true).Where(whereClause);

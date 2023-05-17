@@ -12,5 +12,6 @@ namespace PersonService.Business.Services
         Task CreatePerson(PersonModel createPersonModel);
         Task<List<PersonViewModel>> GetPeople();
         Task DeletePerson(Guid Id);
+        Task<PersonDetailModel> GetPersonDetail(Guid Id);
     }
 }
