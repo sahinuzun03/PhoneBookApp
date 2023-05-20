@@ -18,14 +18,14 @@ namespace PersonService.Business.Services.MyBackgroundService
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                // ListenToQueue metodunu burada çağırabilirsiniz
-                _contactInfoServices.ListenToQueue();
+            //while (!stoppingToken.IsCancellationRequested)
+            //{
+            //    // ListenToQueue metodunu burada çağırabilirsiniz
+            //    //_contactInfoServices.ListenToQueue();
 
-                // Uygun bir bekleme süresi belirleyin
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-            }
+            //    // Uygun bir bekleme süresi belirleyin
+            //    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            //}
         }
     }
 }

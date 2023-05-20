@@ -14,6 +14,8 @@ namespace ReportService.Business.AutoMapper
         public Mapping()
         {
             CreateMap<Report, ReportModel>().ReverseMap();
+            CreateMap<ReportDetailModel,ReportDetail>().ReverseMap(); 
+            CreateMap<ReportDetailDTO,ReportDetailModel>().ReverseMap();
         }
     }
 }

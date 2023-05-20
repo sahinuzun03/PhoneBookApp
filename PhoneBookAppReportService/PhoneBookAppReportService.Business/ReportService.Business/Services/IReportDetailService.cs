@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace ReportService.Business.Services
 {
-    public interface IReportServices
+    public interface IReportDetailService 
     {
-        Task<Report> CreateReport(ReportModel model);
-        Task WantReportDetail();
-        Task WantReportDetails();
+        Task CreateReportDetail(ReportDetailModel model);
     }
 }

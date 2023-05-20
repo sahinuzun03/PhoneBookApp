@@ -23,12 +23,12 @@ namespace PersonService.Business.Services
         private readonly IMapper _mapper;
         private readonly IContactInfoRepo _contactInfoRepo;
         private IConfiguration _configuration;
-        public ContactInfoServices(IMapper mapper,IPersonRepo personRepo,IContactInfoRepo contactInfoRepo,IConfiguration configuration)
+        public ContactInfoServices(IMapper mapper, IPersonRepo personRepo, IContactInfoRepo contactInfoRepo, IConfiguration configuration)
         {
 
             _mapper = mapper;
-            _personRepo = personRepo;  
-            _contactInfoRepo = contactInfoRepo; 
+            _personRepo = personRepo;
+            _contactInfoRepo = contactInfoRepo;
             _configuration = configuration;
 
         }
@@ -44,8 +44,8 @@ namespace PersonService.Business.Services
         public async Task DeleteContactInfo(Guid contactID)
         {
             _contactInfoRepo.DeleteById(contactID);
-            await _contactInfoRepo.SaveChangesAsync();   
-            
+            await _contactInfoRepo.SaveChangesAsync();
+
         }
 
         public async Task<List<ContactInfoViewModel>> GetContactInfo(Guid personId)
@@ -71,8 +71,9 @@ namespace PersonService.Business.Services
             ConnectionFactory factory = new();
             factory.Uri = new(Uri);
 
-            using IConnection connection = factory.CreateConnection();
-            using IModel channel = connection.CreateModel();
+            IConnection connection = factory.CreateConnection();
+            IModel channel = connection.CreateModel();
+
 
             channel.QueueDeclare(
                 queue: requestQueueName,
@@ -83,28 +84,30 @@ namespace PersonService.Business.Services
             EventingBasicConsumer consumer = new(channel);
             channel.BasicConsume(
                 queue: requestQueueName,
-                autoAck: false,
+                autoAck: true,
                 consumer: consumer);
 
-            
+
             consumer.Received += async (sender, e) =>
             {
-                var responseMessageString = JsonConvert.SerializeObject(SendReportDetail());
+                var reportDetails = GiveReportDetail();
+                var responseMessageString = JsonConvert.SerializeObject(reportDetails);
                 byte[] responseMessage = Encoding.UTF8.GetBytes(responseMessageString);
-                IBasicProperties properties = channel.CreateBasicProperties();
+
+                var properties = channel.CreateBasicProperties();
                 properties.CorrelationId = e.BasicProperties.CorrelationId;
-
-
                 channel.BasicPublish(
                     exchange: string.Empty,
                     routingKey: e.BasicProperties.ReplyTo,
                     basicProperties: properties,
                     body: responseMessage);
+
+                channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: false);
             };
         }
 
 
-        public List<ReportDetailDTO> SendReportDetail()
+        public List<ReportDetailDTO> GiveReportDetail()
         {
             var reportDetails = _contactInfoRepo.GetDataWithLinqExp(x => x.DeletedAt == null && x.Location != null).GroupBy(x => x.Location).Select(x => new ReportDetailDTO
             {
@@ -114,6 +117,35 @@ namespace PersonService.Business.Services
             }).ToList();
 
             return reportDetails;
+        }
+
+
+        //Buraya 1 tane ID göndereceğiz
+        public void SendReportDetailstoRabbitMQ(string reportID)
+        {
+
+            var reportDetails = GiveReportDetail();
+            var reportDetailsJson = JsonConvert.SerializeObject(reportDetails);
+
+            ConnectionFactory factory = new();
+            factory.Uri = new("amqps://agynxcdk:czCiBq-QnX_MgyDat8Iqxl2bVtBOGZFH@woodpecker.rmq.cloudamqp.com/agynxcdk");
+
+
+
+
+            IConnection connection = factory.CreateConnection();
+            IModel channel = connection.CreateModel();
+
+
+            channel.QueueDeclare(queue: reportID, exclusive: false);
+            //channel.ExchangeDeclare(exchange: "direct-exchange-example", type: ExchangeType.Direct);
+
+            byte[] byteMessage = Encoding.UTF8.GetBytes(reportDetailsJson);
+
+            channel.BasicPublish(
+                exchange: "",
+                routingKey: reportID,
+                body: byteMessage);
         }
     }
 }

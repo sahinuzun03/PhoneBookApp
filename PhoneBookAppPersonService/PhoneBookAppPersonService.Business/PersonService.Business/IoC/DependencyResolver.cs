@@ -26,7 +26,7 @@ namespace PersonService.Business.IoC
             builder.RegisterType<PersonServices>().As<IPersonServices>().InstancePerLifetimeScope();
             builder.RegisterType<ContactInfoServices>().As<IContactInfoServices>().InstancePerLifetimeScope();
 
-            //BackgrounService 
+            ////BackgrounService 
             builder.RegisterType<ReportBackgroundService>().As<IHostedService>().InstancePerDependency();
 
             //AUTOMAPPER

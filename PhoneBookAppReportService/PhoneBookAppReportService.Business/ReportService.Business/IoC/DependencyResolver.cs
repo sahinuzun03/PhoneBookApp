@@ -21,6 +21,7 @@ namespace ReportService.Business.IoC
             builder.RegisterType<ReportServices>().As<IReportServices>().InstancePerLifetimeScope();    
 
             builder.RegisterType<ReportDetailsRepo>().As<IReportDetailsRepo>().InstancePerLifetimeScope();
+            builder.RegisterType<ReportDetailService>().As<IReportDetailService>().InstancePerLifetimeScope();
 
             //AUTOMAPPER
             builder.Register(context => new MapperConfiguration(cfg =>

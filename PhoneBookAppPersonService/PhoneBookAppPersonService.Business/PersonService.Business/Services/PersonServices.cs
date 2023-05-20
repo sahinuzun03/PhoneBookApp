@@ -15,15 +15,15 @@ namespace PersonService.Business.Services
     {
         private readonly IPersonRepo _personRepo;
         private readonly IMapper _mapper;
-        public PersonServices(IPersonRepo personRepo,IMapper mapper)
+        public PersonServices(IPersonRepo personRepo, IMapper mapper)
         {
             _personRepo = personRepo;
-            _mapper = mapper;   
+            _mapper = mapper;
         }
         public async Task CreatePerson(PersonModel createPersonModel)
         {
-           var addPerson = _mapper.Map<Person>(createPersonModel);
-            await _personRepo.InsertAsync(addPerson);   
+            var addPerson = _mapper.Map<Person>(createPersonModel);
+            await _personRepo.InsertAsync(addPerson);
             _personRepo.SaveChanges();
         }
 
@@ -49,7 +49,7 @@ namespace PersonService.Business.Services
         public async Task<PersonDetailModel> GetPersonDetail(Guid Id)
 
         {
-            var personDetail = await  _personRepo.GetDataWithLinqExp(x => x.DeletedAt == null && x.Id == Id, "ContactInfoList").Select(x => new PersonDetailModel
+            var personDetail = await _personRepo.GetDataWithLinqExp(x => x.DeletedAt == null && x.Id == Id, "ContactInfoList").Select(x => new PersonDetailModel
             {
                 Company = x.Company,
                 Id = x.Id,

@@ -13,6 +13,7 @@ namespace PersonService.Business.Services
         Task DeleteContactInfo(Guid contactId);
         Task<List<ContactInfoViewModel>> GetContactInfo(Guid personId);
         void ListenToQueue();
-        List<ReportDetailDTO> SendReportDetail();
+        List<ReportDetailDTO> GiveReportDetail();
+        void SendReportDetailstoRabbitMQ(string reportID);
     }
 }
